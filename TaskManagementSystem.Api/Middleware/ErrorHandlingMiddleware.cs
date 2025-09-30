@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using System.Text.Json;
-using TaskManagementSystem.Application.Exceptions;
+using TaskManagementSystem.Application.DTOs;
 
 namespace TaskManagementSystem.Api.Middleware
 {
@@ -32,10 +32,10 @@ namespace TaskManagementSystem.Api.Middleware
 
                 var validationErrors = vex.Errors.Select(e => new { e.PropertyName, e.ErrorMessage });
 
-                var result = JsonSerializer.Serialize(new ErrorResponse()
+                var result = JsonSerializer.Serialize(new ResponseExceptionDto()
                 {
-                    error = vex.Message,
-                    details = validationErrors
+                    Message = vex.Message,
+                    Details = validationErrors
                 });
 
                 await context.Response.WriteAsync(result);
@@ -50,10 +50,10 @@ namespace TaskManagementSystem.Api.Middleware
                 if (_env.IsDevelopment())
                 {
 
-                    result = JsonSerializer.Serialize(new ErrorResponse()
+                    result = JsonSerializer.Serialize(new ResponseExceptionDto()
                     {
-                        error = ex.Message,
-                        details = new List<object>(){ new
+                        Message = ex.Message,
+                        Details = new List<object>(){ new
                         {
                             type = ex.GetType().Name,
                             stackTrace = ex.StackTrace
@@ -64,9 +64,9 @@ namespace TaskManagementSystem.Api.Middleware
                 else
                 {
 
-                    result = JsonSerializer.Serialize(new ErrorResponse()
+                    result = JsonSerializer.Serialize(new ResponseExceptionDto()
                     {
-                        error = "An unexpected error occurred."
+                        Message = "An unexpected error occurred."
                     });
 
                 }

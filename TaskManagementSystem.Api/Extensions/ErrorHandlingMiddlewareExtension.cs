@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TaskManagementSystem.Application.Exceptions;
+using TaskManagementSystem.Application.DTOs;
 
 namespace TaskManagementSystem.Api.Extensions
 {
@@ -21,10 +21,10 @@ namespace TaskManagementSystem.Api.Extensions
                             }))
                             .ToList();
 
-                        var errorResponse = new ErrorResponse
+                        var errorResponse = new ResponseExceptionDto
                         {
-                            error = "Validation failed",
-                            details = errors
+                            Message = "Validation failed",
+                            Details = errors
                         };
 
                         return new BadRequestObjectResult(errorResponse);
